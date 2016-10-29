@@ -170,29 +170,53 @@
 
     $('.toggle').bootstrapSwitch();
 
+    $.getJSON("api/alarms", function(data) {
+      $('#monday-alarm').val(data["monday"]["time"]);
+      $('#tuesday-alarm').val(data["tuesday"]["time"]);
+      $('#wednesday-alarm').val(data["wednesday"]["time"]);
+      $('#thursday-alarm').val(data["thursday"]["time"]);
+      $('#friday-alarm').val(data["friday"]["time"]);
+      $('#saturday-alarm').val(data["saturday"]["time"]);
+      $('#sunday-alarm').val(data["sunday"]["time"]);
+
+      $('#monday-alarm-enabled').bootstrapSwitch('state', data["monday"]["enabled"]);
+      $('#tuesday-alarm-enabled').bootstrapSwitch('state', data["tuesday"]["enabled"]);
+      $('#wednesday-alarm-enabled').bootstrapSwitch('state', data["wednesday"]["enabled"]);
+      $('#thursday-alarm-enabled').bootstrapSwitch('state', data["thursday"]["enabled"]);
+      $('#friday-alarm-enabled').bootstrapSwitch('state', data["friday"]["enabled"]);
+      $('#saturday-alarm-enabled').bootstrapSwitch('state', data["saturday"]["enabled"]);
+      $('#sunday-alarm-enabled').bootstrapSwitch('state', data["sunday"]["enabled"]);
+    });
+
     function postAlarms() {
       var alarms = {};
-      alarms["monday-alarm"] = $('#monday-alarm').val();
-      alarms["monday-alarm-enabled"] = $('#monday-alarm-enabled').is(":checked");
-      alarms["tuesday-alarm"] = $('#tuesday-alarm').val();
-      alarms["tuesday-alarm-enabled"] = $('#tuesday-alarm-enabled').is(":checked");
-      alarms["wednesday-alarm"] = $('#wednesday-alarm').val();
-      alarms["wednesday-alarm-enabled"] = $('#wednesday-alarm-enabled').is(":checked");
-      alarms["thursday-alarm"] = $('#thursday-alarm').val();
-      alarms["thursday-alarm-enabled"] = $('#thursday-alarm-enabled').is(":checked");
-      alarms["friday-alarm"] = $('#friday-alarm').val();
-      alarms["friday-alarm-enabled"] = $('#friday-alarm-enabled').is(":checked");
-      alarms["saturday-alarm"] = $('#saturday-alarm').val();
-      alarms["saturday-alarm-enabled"] = $('#saturday-alarm-enabled').is(":checked");
-      alarms["sunday-alarm"] = $('#sunday-alarm').val();
-      alarms["sunday-alarm-enabled"] = $('#sunday-alarm-enabled').is(":checked");
-
+      alarms["monday"] = {};
+      alarms["monday"]["time"] = $('#monday-alarm').val();
+      alarms["monday"]["enabled"] = $('#monday-alarm-enabled').is(":checked");
+      alarms["tuesday"] = {};
+      alarms["tuesday"]["time"] = $('#tuesday-alarm').val();
+      alarms["tuesday"]["enabled"] = $('#tuesday-alarm-enabled').is(":checked");
+      alarms["wednesday"] = {};
+      alarms["wednesday"]["time"] = $('#wednesday-alarm').val();
+      alarms["wednesday"]["enabled"] = $('#wednesday-alarm-enabled').is(":checked");
+      alarms["thursday"] = {};
+      alarms["thursday"]["time"] = $('#thursday-alarm').val();
+      alarms["thursday"]["enabled"] = $('#thursday-alarm-enabled').is(":checked");
+      alarms["friday"] = {};
+      alarms["friday"]["time"] = $('#friday-alarm').val();
+      alarms["friday"]["enabled"] = $('#friday-alarm-enabled').is(":checked");
+      alarms["saturday"] = {};
+      alarms["saturday"]["time"] = $('#saturday-alarm').val();
+      alarms["saturday"]["enabled"] = $('#saturday-alarm-enabled').is(":checked");
+      alarms["sunday"] = {};
+      alarms["sunday"]["time"] = $('#sunday-alarm').val();
+      alarms["sunday"]["enabled"] = $('#sunday-alarm-enabled').is(":checked");
       $.ajax({
         type: "POST",
-        url: "/api/alarms",
+        url: "api/alarms",
         data: JSON.stringify(alarms),
-        //contentType: "application/json",
-        dataType: "json"
+        contentType: "application/json; charset=utf-8",
+        dataType   : "json"
       });
       console.log(alarms);
     }
