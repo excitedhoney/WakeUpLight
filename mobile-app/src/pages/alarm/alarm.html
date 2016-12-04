@@ -1,0 +1,17 @@
+<ion-header>
+  <ion-navbar>
+    <ion-title>
+      About
+    </ion-title>
+  </ion-navbar>
+</ion-header>
+
+<ion-content padding>
+  <ion-item *ngFor="let day of DayNames; let i = index">
+    <ion-label>{{day}}</ion-label>
+    <ion-datetime displayFormat="HH:mm" [(ngModel)]="Alarms[i]"></ion-datetime>
+    <ion-toggle [(ngModel)]="AlarmsEnabled[i]"></ion-toggle>
+  </ion-item>
+
+  <button ion-button full padding (click)="onSave()">Save</button>
+</ion-content>

@@ -2,6 +2,7 @@
 #include <TimeLib.h>
 #include <NtpClientLib.h>
 #include <ESP8266WiFi.h>
+#include <ESP8266mDNS.h>
 #include <WiFiUdp.h>
 #include <Ticker.h>
 
@@ -32,22 +33,4 @@ static void checkAlarm() {
     Serial.println("Alarm time reached!");
     lightOn();
   }
-}
-
-static void syncTime() {
-  Serial.print("The time is: ");
-  Serial.println(NTP.getTimeDateString());
-
-  Serial.print("The date is: ");
-  Serial.print(month(now()));
-  Serial.print(":");
-  Serial.println(day(now()));
-
-  Serial.print("Todays alarm is set to: ");
-  Serial.print(alarms[weekday(now())].hour);
-  Serial.print(':');
-  Serial.println(alarms[weekday(now())].minute);
-
-  Serial.print("Today is a: ");
-  Serial.println(weekday(now() + 172800));
 }

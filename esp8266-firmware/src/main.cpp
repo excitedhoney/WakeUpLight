@@ -9,18 +9,48 @@
 
 #define DEBUG
 
-bool testWifi() {
-  int c = 0;
-  Serial.println("Waiting for Wifi to connect");
-  while ( c < 20 ) {
-    if (WiFi.status() == WL_CONNECTED) { return true; }
-    delay(500);
-    Serial.print(WiFi.status());
-    c++;
+void startNormalMode() {
+  initAlarm();
+  webServerInit();
+
+  Serial.println("Starting MDNS");
+
+  if (!MDNS.begin("ESP8266")) {
+    Serial.println("Cannot setup MDNS!");
   }
-  Serial.println("");
-  Serial.println("Connect timed out, opening AP");
-  return false;
+  MDNS.addService("http", "tcp", 80);
+
+  Serial.println(WiFi.localIP());
+}
+
+void startConfigMode() {
+  WiFi.beginSmartConfig();
+
+  // Wait for smart config
+  while (WiFi.status() != WL_CONNECTED) {
+    delay(500);
+    Serial.print(".");
+    Serial.println(WiFi.smartConfigDone());
+  }
+
+  // If smartconfig done start normal mode.
+  startNormalMode();
+}
+
+
+bool tryConnectWifi() {
+  int retries = 0;
+
+  WiFi.mode(WIFI_STA);
+  Serial.print("Trying to connect to WiFi");
+
+  while(WiFi.status() != WL_CONNECTED && retries < 20) {
+    Serial.print(".");
+    retries++;
+    delay(1000);
+  }
+
+  return (WiFi.status() == WL_CONNECTED);
 }
 
 void setup() {
@@ -30,15 +60,15 @@ void setup() {
   // Start the file system
   SPIFFS.begin();
 
-  // Load the alarm and wifi settings from EEPROM
-  String wifiSsid = "";
-  String wifiPassword = "";
-  loadWifiSettings(&wifiSsid, &wifiPassword);
-  while (WiFi.status() != WL_CONNECTED) {
-    delay(100);
+  // Try to connect WiFi
+  bool connected = tryConnectWifi();
+
+  if (connected) {
+    startNormalMode();
   }
-  initAlarm();
-  webServerInit();
+  else {
+    startConfigMode();
+  }
 }
 
 
