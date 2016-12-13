@@ -76,10 +76,11 @@ static void sendOk(AsyncWebServerRequest *request) {
 
 void webServerInit() {
   // Pages
-  server.serveStatic("/alarm.html", SPIFFS, "www/alarm.html");
-  server.serveStatic("/light.html", SPIFFS, "www/light.html");
-  server.serveStatic("/settings.html", SPIFFS, "www/settings.html");
-  server.serveStatic("/", SPIFFS, "www/index.html");
+  server.serveStatic("/", SPIFFS, "/www/").setDefaultFile("index.html");
+  //server.serveStatic("/alarm.html", SPIFFS, "www/alarm.html");
+  //server.serveStatic("/light.html", SPIFFS, "www/light.html");
+  //server.serveStatic("/settings.html", SPIFFS, "www/settings.html");
+  //server.serveStatic("/", SPIFFS, "www/index.html");
 
   // LIGHT API
   server.on("/api/light/on", HTTP_POST, lightOn_CB);

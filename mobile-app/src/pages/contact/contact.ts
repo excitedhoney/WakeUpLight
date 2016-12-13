@@ -3,10 +3,10 @@ import { Component } from '@angular/core';
 import { NavController } from 'ionic-angular';
 
 @Component({
-  selector: 'page-light',
-  templateUrl: 'light.html'
+  selector: 'page-contact',
+  templateUrl: 'contact.html'
 })
-export class LightPage {
+export class ContactPage {
 
   constructor(public navCtrl: NavController) {
 
